@@ -5,27 +5,26 @@ from LCD.lcd import *
 from dao.carddao import CardsDAO
 from dao.loggerdao import LoggerDAO
 from proxsensor.sensor import ProxSensor
+from logger.httpserverdatasource import HTTPServerDatasource
 import signal
 import time
-
+import threading
 import RPi.GPIO as GPIO
 
 GREEN_LED_PORT = 11
 RED_LED_PORT = 13
 YELLOW_LED_PORT = 15
 
-TARJETA_BLANCA = [213,60,214,229,218]
-
-Running = True
-
-def end_read(signal, frame):
-  print "Ctrl+C captured, ending read."
-  #MIFAREReader.GPIO_CLEAN()
-  Running = False
 
 class RFID(object):
       
   def __init__(self):
+
+    # interceptar signaling
+
+    signal.signal(signal.SIGTERM, self.handle_shutdown)
+    signal.signal(signal.SIGINT, self.handle_shutdown)
+
     #LED INIT
     GPIO.setwarnings(False) 
     GPIO.setmode(GPIO.BOARD)
@@ -42,6 +41,22 @@ class RFID(object):
     self.loggerDao=LoggerDAO()
     #Proximite Sensor Init
     self.proxsensor = ProxSensor()
+    ## ipc para thread http server
+    self.ipc_logger = threading.Event()
+    self.ipc_logger.set()
+     ## ipc para main
+    self.ipc_main = threading.Event()
+    self.ipc_main.set()
+    self.http_server_ds=HTTPServerDatasource(self.ipc_logger)
+
+
+    threading.Thread(target=self.http_server_ds.run).start()
+
+  def handle_shutdown(self, num=None, frame=None):
+
+    self.ipc_logger.clear()
+    time.sleep(2)
+    self.ipc_main.clear()
 
 
   def _checkCard(self,Data):
@@ -107,15 +122,18 @@ class RFID(object):
     print "Reading Timeout"
 
   def run(self):
-    while True:
+
+    while self.ipc_main.is_set():
       print "midiendo"
       Medida =  self.proxsensor.medir()
       print Medida
       if Medida <10:
+        self.loggerDao.log_entry("Presencia detectada")
         GPIO.output(YELLOW_LED_PORT, True)
         self.read()
         GPIO.output(YELLOW_LED_PORT, False)
       time.sleep(1)
+    print "Proceso Finalizado"
 
 
 # BOB 213,60,214,229,218
@@ -123,6 +141,7 @@ class RFID(object):
 def main():
   rfid=RFID()
   rfid.run()
+
 
 if __name__ == '__main__':
   main()
