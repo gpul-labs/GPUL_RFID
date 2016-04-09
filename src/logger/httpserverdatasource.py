@@ -1,8 +1,9 @@
 import time
 
-from logger.loggerdao import LoggerDAO
+from src.dao.loggerdao import LoggerDAO
 
-class ServerDatasource(object):
+
+class HTTPServerDatasource(object):
     def __init__(self):
 
         self.running = True
@@ -17,13 +18,14 @@ class ServerDatasource(object):
             html = '<table width="500px" border="1"><thead><th width="20%">id</th><th width="40%">event</th><th width="40%">moment</th></thead><tbody>'
 
             for r in entries:
-                html += '<tr><td width="20%">' + str(r['id']) + '</td><td width="40%">' + r['event'] + '</td><td width="40%">' + str(r['moment']) + '</td></tr>'
+                html += '<tr><td width="20%">' + str(r['id']) + '</td><td width="40%">' + r[
+                    'event'] + '</td><td width="40%">' + str(r['moment']) + '</td></tr>'
             html += '</tbody></table><script>setTimeout(function(){window.location.reload(1);}, 2000)</script>'
 
             with open(self.doc_root_file, 'w') as f:
                 f.write(html)
 
-if __name__ == '__main__':
 
-    ds = ServerDatasource()
+if __name__ == '__main__':
+    ds = HTTPServerDatasource()
     ds.run()

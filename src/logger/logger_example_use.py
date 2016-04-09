@@ -1,4 +1,4 @@
-from logger.loggerdao import LoggerDAO
+from src.dao.loggerdao import LoggerDAO
 
 logger = LoggerDAO()
 

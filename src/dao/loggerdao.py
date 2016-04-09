@@ -1,12 +1,9 @@
-import pymysql
+from src.datasource.mysql import MysqlSource
 
 
 class LoggerDAO(object):
     def __init__(self):
-        self.db = pymysql.connect(host='localhost', port=3306,
-                                  user='rfid', passwd='rfid_gpul', db='rfid',
-                                  cursorclass=pymysql.cursors.DictCursor)
-        self.db.autocommit(True)
+        self.db = MysqlSource()
 
     def log_entry(self, event):
         with self.db.cursor() as c:
