@@ -4,12 +4,15 @@ from MFRC522.MFRC522 import MFRC522
 from LCD.lcd import *
 from dao.carddao import CardsDAO
 from dao.loggerdao import LoggerDAO
+from proxsensor.proxsensor import ProxSensor
 import signal
 import time
 
 import RPi.GPIO as GPIO
 
 GREEN_LED_PORT = 11
+RED_LED_PORT = 13
+YELLOW_LED_PORT = 15
 
 TARJETA_BLANCA = [213,60,214,229,218]
 
@@ -27,7 +30,9 @@ class RFID(object):
     GPIO.setwarnings(False) 
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(GREEN_LED_PORT, GPIO.OUT)
+    GPIO.setup(RED_LED_PORT, GPIO.OUT)
     GPIO.output(GREEN_LED_PORT, False) 
+    GPIO.output(RED_LED_PORT, False) 
     #LCD INIT
     lcd_init()
     #DAO INIT
@@ -83,7 +88,9 @@ class RFID(object):
           print"Access Denied"
           self.loggerDao.log_entry("Access Denied, ID "+self._codigoToFormatedString(backData))
           self._printLCD("Access Denied",self._codigoToString(backData))
+          GPIO.output(RED_LED_PORT, True)
           time.sleep(3)
+          GPIO.output(RED_LED_PORT, False)
           lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
         else:
           print "Access Granted"
@@ -94,12 +101,13 @@ class RFID(object):
           break
     print "Reading Timeout"
 
+    def run(self):
+
 # BOB 213,60,214,229,218
 # Alice 148,209,91,46,48
 def main():
   rfid=RFID()
-  while Running:
-    rfid.read()
+  RFID.run()
 
 if __name__ == '__main__':
   main()
