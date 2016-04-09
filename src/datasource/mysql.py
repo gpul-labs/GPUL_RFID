@@ -7,3 +7,7 @@ class MysqlSource(object):
                                   user='rfid', passwd='rfid_gpul', db='rfid',
                                   cursorclass=pymysql.cursors.DictCursor)
         self.db.autocommit(True)
+
+    def get_cursor(self):
+
+        return self.db.cursor()

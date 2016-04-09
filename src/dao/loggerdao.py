@@ -6,10 +6,10 @@ class LoggerDAO(object):
         self.db = MysqlSource()
 
     def log_entry(self, event):
-        with self.db.cursor() as c:
+        with self.db.get_cursor() as c:
             c.execute("INSERT INTO logger SET event=%s", [event])
 
     def get_entries(self):
-        with self.db.cursor() as c:
+        with self.db.get_cursor() as c:
             c.execute("SELECT * FROM logger order by moment DESC")
             return c.fetchall()
