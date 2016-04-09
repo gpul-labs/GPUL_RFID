@@ -27,13 +27,13 @@ def init():
   #LCD INIT
   lcd_init()
 
-def readCard():
-  continue_reading = True
+def read():
   MIFAREReader = MFRC522()
-  EndTime = time.time() + 5
-  print "Acerque la Tarjeta, tienes 5 segundos"
-  while time.time() < EndTime:
+  print "Leer Tarjeta, tienes 5 s"
+  EndTime = time.time()+5
+  while EndTime > time.time():
     (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+    print "hola"
     if status == MIFAREReader.MI_OK:
       print "Card detected"
     #ENCENDER LEED
@@ -47,15 +47,17 @@ def readCard():
       print "encender led"
       #APAGAR LEED
       time.sleep(3)
-    GPIO.output(GREEN_LED_PORT, False)
-    lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
-  print "Tiempo de lectura expirado"
-
+      GPIO.output(GREEN_LED_PORT, False)
+      lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
+      break
+  print "Tiempo lectura expirado"
+  
 def main():
 
   init()
   signal.signal(signal.SIGINT, end_read)
-  readCard()
+  while True:
+    read()
 
 if __name__ == '__main__':
   main()
