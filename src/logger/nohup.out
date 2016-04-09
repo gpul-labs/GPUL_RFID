@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "httpserverdatasource.py", line 32, in <module>
+    ds.run()
+  File "httpserverdatasource.py", line 18, in run
+    entries = self.logger_dao.get_entries()
+  File "../dao/loggerdao.py", line 15, in get_entries
+    c.execute("SELECT * FROM "+self.table_name+" order by moment DESC")
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/cursors.py", line 158, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/cursors.py", line 308, in _query
+    conn.query(q)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 820, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 1002, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 1285, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 946, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 982, in _read_bytes
+    2013, "Lost connection to MySQL server during query")
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+Traceback (most recent call last):
+  File "httpserverdatasource.py", line 32, in <module>
+    ds.run()
+  File "httpserverdatasource.py", line 18, in run
+    entries = self.logger_dao.get_entries()
+  File "../dao/loggerdao.py", line 15, in get_entries
+    c.execute("SELECT * FROM "+self.table_name+" order by moment DESC")
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/cursors.py", line 158, in execute
+    result = self._query(query)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/cursors.py", line 308, in _query
+    conn.query(q)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 820, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 1002, in _read_query_result
+    result.read()
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 1285, in read
+    first_packet = self.connection._read_packet()
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 946, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "/usr/local/lib/python2.7/dist-packages/pymysql/connections.py", line 982, in _read_bytes
+    2013, "Lost connection to MySQL server during query")
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
