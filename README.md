@@ -2,7 +2,7 @@
 Sistema RFID para apertura de puertas
 
 ## Esquema
-![Esquema proyecto](https://github.com/AlexPeral/GPUL_RFID/Circuito.png "Esquema proyecto")
+![Esquema proyecto](https://github.com/AlexPeral/GPUL_RFID/blob/master/Circuito.png "Esquema proyecto")
 
 IP de la raspberry `192.168.13.117`
 
