@@ -131,10 +131,11 @@ class RFID(object):
       print "midiendo"
       Medida =  self.proxsensor.medir()
       print Medida
-      if Medida <10:
-        self.camera.capture('/srv/rfid_logger_http/capture.jpg')
+      if Medida <10:        
         self.loggerDao.log_entry("Presencia detectada")
         GPIO.output(YELLOW_LED_PORT, True)
+        self._printLCD("Pasa La Tarjeta","Tienes 5 seg")
+        self.camera.capture('/srv/rfid_logger_http/capture.jpg')
         self.read()
         GPIO.output(YELLOW_LED_PORT, False)
       time.sleep(1)
