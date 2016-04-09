@@ -8,6 +8,6 @@ class MysqlSource(object):
                                   cursorclass=pymysql.cursors.DictCursor)
         self.db.autocommit(True)
 
-    def get_cursor(self):
+    def get_db(self):
 
-        return self.db.cursor()
+        return self.db

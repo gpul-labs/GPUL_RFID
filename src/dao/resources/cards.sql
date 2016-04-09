@@ -1,0 +1,11 @@
+CREATE TABLE cards
+(
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    username VARCHAR(40) NOT NULL,
+    num0 INT(11) NOT NULL,
+    num1 INT(11),
+    num2 INT(11),
+    num3 INT(11),
+    num4 INT(11),
+    create_time TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP' NOT NULL
+);
