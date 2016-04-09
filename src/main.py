@@ -51,7 +51,7 @@ class RFID(object):
      lcd_string(Line2,LCD_LINE_2)
 
   def _BeforeWait(self,Nombre):
-    self._printLCD("Acceso Concedido","Wellcome "+Nombre)
+    self._printLCD("Access Granted","Welcome "+Nombre[0].upper()+Nombre[1:].lower())
     GPIO.output(GREEN_LED_PORT, True)
 
   def _AfterWait(self):
@@ -61,7 +61,7 @@ class RFID(object):
 
   def read(self):
     MIFAREReader = MFRC522()
-    print "Leer Tarjeta, tienes 5 s"
+    print "Reading card, have 5 s"
     EndTime = time.time()+5
     while EndTime > time.time():
       (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -74,20 +74,20 @@ class RFID(object):
         print "Card read UID: "+str(backData[0])+","+str(backData[1])+","+str(backData[2])+","+str(backData[3])+","+str(backData[4])
         user=self._checkCard(backData)
         if user is None:
-          print"Acceso Dengado"
-          self._printLCD("Acceso Denegado",self._codigoToString(backData))
+          print"Access Denied"
+          self._printLCD("Access Denied",self._codigoToString(backData))
           time.sleep(3)
           lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
         else:
-          print "Acceso Concedido"
+          print "Access Granted"
           self._BeforeWait(user)
           time.sleep(3)
           self._AfterWait()
           break
-    print "Tiempo lectura expirado"
+    print "Reading Timeout"
 
 # BOB 213,60,214,229,218
-
+# Alice 148,209,91,46,48
 def main():
   rfid=RFID()
   while Running:

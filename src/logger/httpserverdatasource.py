@@ -1,6 +1,6 @@
 import time
 
-from src.dao.loggerdao import LoggerDAO
+from ..dao.loggerdao import LoggerDAO
 
 
 class HTTPServerDatasource(object):
