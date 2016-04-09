@@ -1,3 +1,7 @@
+# Schema
+![Esquema RFID](https://github.com/AlexPeral/GPUL_RFID/blob/master/RFID/Diagrama.jpeg "Esquema RFID")
+
+
 ## Config
 Module RFID-RC522
 
