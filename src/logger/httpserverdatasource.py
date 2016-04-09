@@ -1,6 +1,7 @@
 import time
-
-from ..dao.loggerdao import LoggerDAO
+import sys
+sys.path.append("../")
+from dao.loggerdao import LoggerDAO
 
 
 class HTTPServerDatasource(object):

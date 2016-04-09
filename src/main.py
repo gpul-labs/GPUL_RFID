@@ -46,12 +46,18 @@ class RFID(object):
   def _codigoToString(self,backData):
     return str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
 
+  def _codigoToFormatedString(self,backData):
+    return str(backData[0])+"."+str(backData[1])+"."+str(backData[2])+"."+str(backData[3])+"."+str(backData[4])
+
   def _printLCD(self,Line1,Line2):
      lcd_string(Line1,LCD_LINE_1)
      lcd_string(Line2,LCD_LINE_2)
 
+  def _formatName(self,Nombre):
+    return Nombre[0].upper()+Nombre[1:].lower()
+
   def _BeforeWait(self,Nombre):
-    self._printLCD("Access Granted","Welcome "+Nombre[0].upper()+Nombre[1:].lower())
+    self._printLCD("Access Granted","Welcome "+self._formatName(Nombre))
     GPIO.output(GREEN_LED_PORT, True)
 
   def _AfterWait(self):
@@ -75,11 +81,13 @@ class RFID(object):
         user=self._checkCard(backData)
         if user is None:
           print"Access Denied"
+          self.loggerDao.log_entry("Access Denied, ID "+self._codigoToFormatedString(backData))
           self._printLCD("Access Denied",self._codigoToString(backData))
           time.sleep(3)
           lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
         else:
           print "Access Granted"
+          self.loggerDao.log_entry("Access Granted, User: "+user+" Card "+self._codigoToFormatedString(backData))
           self._BeforeWait(user)
           time.sleep(3)
           self._AfterWait()
