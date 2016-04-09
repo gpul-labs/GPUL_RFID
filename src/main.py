@@ -31,9 +31,33 @@ class RFID(object):
     #LCD INIT
     lcd_init()
     #DAO INIT
-    cardDao=CardsDAO()
-    loggerDao=LoggerDAO()
+    self.cardDao=CardsDAO()
+    self.loggerDao=LoggerDAO()
 
+
+  def _checkCard(self,Data):
+    Card=self.cardDao.get_card(Data[0],Data[1],Data[2],Data[3],Data[4])
+    if Card is not None:
+      return Card.username
+    else
+      return None
+
+
+  def _codigoToString(backData):
+    return str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
+
+  def _printLCD(self,Line1,Line2):
+     
+
+  def _BeforeWait(self,Nombre):
+    lcd_string("Acceso Concedido",LCD_LINE_1)
+    lcd_string(Nombre,LCD_LINE_2)
+    GPIO.output(GREEN_LED_PORT, True)
+
+  def _AfterWait(self):
+    GPIO.output(GREEN_LED_PORT, False)
+    lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
+    
 
   def read(self):
     MIFAREReader = MFRC522()
@@ -48,16 +72,14 @@ class RFID(object):
       (status,backData) = MIFAREReader.MFRC522_Anticoll()
       if status == MIFAREReader.MI_OK:
         print "Card read UID: "+str(backData[0])+","+str(backData[1])+","+str(backData[2])+","+str(backData[3])+","+str(backData[4])
-        lcd_string("Card Detected  <",LCD_LINE_1)
-        Codigo = str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
-        lcd_string(Codigo,LCD_LINE_2)
-        GPIO.output(GREEN_LED_PORT, True)
-        print "encender led"
-        #APAGAR LEED
-        time.sleep(3)
-        GPIO.output(GREEN_LED_PORT, False)
-        lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
-        break
+        user=self._checkCard(backData)
+        if user is none:
+          self._printLCD("Acceso Denegado",self._codigoToString(backData))
+        else
+          self._BeforeWait(user)
+          time.sleep(3)
+          self._AfterWait()
+          break
     print "Tiempo lectura expirado"
 
 
