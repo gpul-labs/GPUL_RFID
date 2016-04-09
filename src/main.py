@@ -139,6 +139,7 @@ class RFID(object):
         self.read()
         GPIO.output(YELLOW_LED_PORT, False)
       time.sleep(1)
+    lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
     print "Proceso Finalizado"
 
 
