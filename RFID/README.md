@@ -1,9 +1,11 @@
+# Information
+* Module RFID-RC522
+
+# Sources
+http://fuenteabierta.teubi.co/2013/07/utilizando-el-lector-nfc-rc522-en-la.html
+
 # Schema
 ![Esquema RFID](https://github.com/AlexPeral/GPUL_RFID/blob/master/RFID/Diagrama.jpeg "Esquema RFID")
-
-
-## Config
-Module RFID-RC522
 
 ### Install python-dev
 
