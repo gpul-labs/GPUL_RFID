@@ -10,6 +10,7 @@ import signal
 import time
 import threading
 import RPi.GPIO as GPIO
+import picamera
 
 GREEN_LED_PORT = 11
 RED_LED_PORT = 13
@@ -48,6 +49,8 @@ class RFID(object):
     self.ipc_main = threading.Event()
     self.ipc_main.set()
     self.http_server_ds=HTTPServerDatasource(self.ipc_logger)
+    #Cargar camara
+    self.camera= picamera.PiCamera()
 
 
     threading.Thread(target=self.http_server_ds.run).start()
@@ -121,6 +124,7 @@ class RFID(object):
           break
     print "Reading Timeout"
 
+
   def run(self):
 
     while self.ipc_main.is_set():
@@ -128,6 +132,7 @@ class RFID(object):
       Medida =  self.proxsensor.medir()
       print Medida
       if Medida <10:
+        self.camera.capture('/srv/rfid_logger_http/capture.jpg')
         self.loggerDao.log_entry("Presencia detectada")
         GPIO.output(YELLOW_LED_PORT, True)
         self.read()

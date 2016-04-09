@@ -17,7 +17,7 @@ class HTTPServerDatasource(object):
         while self.running.is_set():
             time.sleep(2)
             entries = self.logger_dao.get_entries()
-            html = '<table width="500px" border="1"><thead><th width="20%">id</th><th width="40%">event</th><th width="40%">moment</th></thead><tbody>'
+            html = '<img src="capture.jpg" width="50%" height="50%"></br><table width="500px" border="1"><thead><th width="20%">id</th><th width="40%">event</th><th width="40%">moment</th></thead><tbody>'
 
             for r in entries:
                 html += '<tr><td width="20%">' + str(r['id']) + '</td><td width="40%">' + r[
