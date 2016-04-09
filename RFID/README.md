@@ -1,4 +1,5 @@
 ## Config
+Module RFID-RC522
 
 ### Install python-dev
 
