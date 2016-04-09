@@ -1,4 +1,4 @@
-from src.datasource.mysql import MysqlSource
+from datasource.mysql import MysqlSource
 
 
 class LoggerDAO(object):
