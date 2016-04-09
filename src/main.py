@@ -1,6 +1,7 @@
 import sys
 
 from MFRC522.MFRC522 import MFRC522
+from LCD.lcd import *
 import signal
 import time
 
@@ -17,32 +18,40 @@ def end_read(signal, frame):
   #MIFAREReader.GPIO_CLEAN()
   GPIO.cleanup()
 
-def init_gpio():
+def init():
+  #LED INIT
   GPIO.setwarnings(False) 
   GPIO.setmode(GPIO.BOARD)
   GPIO.setup(GREEN_LED_PORT, GPIO.OUT)
   GPIO.output(GREEN_LED_PORT, False) 
+  #LCD INIT
+  lcd_init()
 
 def main():
 
-  init_gpio()
+  init()
   signal.signal(signal.SIGINT, end_read)
   continue_reading = True
   MIFAREReader = MFRC522()
 
   while continue_reading:
     (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+    print "hola"
     if status == MIFAREReader.MI_OK:
       print "Card detected"
     #ENCENDER LEED
     (status,backData) = MIFAREReader.MFRC522_Anticoll()
     if status == MIFAREReader.MI_OK:
       print "Card read UID: "+str(backData[0])+","+str(backData[1])+","+str(backData[2])+","+str(backData[3])+","+str(backData[4])
+      lcd_string("Card Detected  <",LCD_LINE_1)
+      Codigo = str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
+      lcd_string(Codigo,LCD_LINE_2)
       GPIO.output(GREEN_LED_PORT, True)
       print "encender led"
       #APAGAR LEED
-    time.sleep(1)
+      time.sleep(3)
     GPIO.output(GREEN_LED_PORT, False)
+    lcd_byte(0x01, LCD_CMD)
 
 if __name__ == '__main__':
   main()
