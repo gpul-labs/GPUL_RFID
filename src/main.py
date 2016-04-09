@@ -4,7 +4,7 @@ from MFRC522.MFRC522 import MFRC522
 from LCD.lcd import *
 from dao.carddao import CardsDAO
 from dao.loggerdao import LoggerDAO
-from proxsensor.proxsensor import ProxSensor
+from proxsensor.sensor import ProxSensor
 import signal
 import time
 
@@ -30,14 +30,18 @@ class RFID(object):
     GPIO.setwarnings(False) 
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(GREEN_LED_PORT, GPIO.OUT)
-    GPIO.setup(RED_LED_PORT, GPIO.OUT)
     GPIO.output(GREEN_LED_PORT, False) 
-    GPIO.output(RED_LED_PORT, False) 
+    GPIO.setup(RED_LED_PORT, GPIO.OUT)
+    GPIO.output(RED_LED_PORT, False)
+    GPIO.setup(YELLOW_LED_PORT, GPIO.OUT)
+    GPIO.output(YELLOW_LED_PORT, False) 
     #LCD INIT
     lcd_init()
     #DAO INIT
     self.cardDao=CardsDAO()
     self.loggerDao=LoggerDAO()
+    #Proximite Sensor Init
+    self.proxsensor = ProxSensor()
 
 
   def _checkCard(self,Data):
@@ -92,6 +96,7 @@ class RFID(object):
           time.sleep(3)
           GPIO.output(RED_LED_PORT, False)
           lcd_byte(0x01, LCD_CMD,LCD_BACKDARK)
+          break
         else:
           print "Access Granted"
           self.loggerDao.log_entry("Access Granted, User: "+user+" Card "+self._codigoToFormatedString(backData))
@@ -101,13 +106,23 @@ class RFID(object):
           break
     print "Reading Timeout"
 
-    def run(self):
+  def run(self):
+    while True:
+      print "midiendo"
+      Medida =  self.proxsensor.medir()
+      print Medida
+      if Medida <10:
+        GPIO.output(YELLOW_LED_PORT, True)
+        self.read()
+        GPIO.output(YELLOW_LED_PORT, False)
+      time.sleep(1)
+
 
 # BOB 213,60,214,229,218
 # Alice 148,209,91,46,48
 def main():
   rfid=RFID()
-  RFID.run()
+  rfid.run()
 
 if __name__ == '__main__':
   main()
